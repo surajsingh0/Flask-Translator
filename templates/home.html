@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+
+{% block main %}
+{% block custom %}
+<style type="text/css">
+	form {display: inline;}
+</style>
+{% endblock %}
+<div class="form-goup container mt-4">
+	<form>
+		<label for="text">Enter Text (<span id="total_words">0</span>/500 Words)</label>
+		<textarea class="form-control" id="text" oninput="leftWords()"rows="5"></textarea>
+		From:
+		<select class="btn btn-primary mt-3" id="from">
+			{% for lang in langs %}
+			{% if "English" in lang %}
+			<option selected>{{lang}}</option>
+			{% endif %}
+			<option>{{ lang }}</option>
+			{% endfor %}
+		</select>
+		To:
+		<select class="btn btn-primary mt-3" id="to">
+			{% for lang in langs %}
+			{% if "Hindi" in lang %}
+			<option selected>{{lang}}</option>
+			{% endif %}
+			<option>{{ lang }}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<button class="btn btn-secondary mt-3 ml-2" id="submit">Translate</button>
+	<button class="btn mt-3 ml-2" onclick="window.location = '/history'">History</button>
+	<hr>
+	<div class="card mt-4">
+		<label class="card-header" for="result">Result</label>
+		<div class="card-body" id="result">{{result}}</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var total_words = document.getElementById('total_words');
+	var textarea = document.getElementById('text');
+
+	function leftWords() {
+		total_words.innerHTML = textarea.value.length;
+	}
+</script>
+<script type=text/javascript>
+	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<script>
+	$(function() {
+		$('#submit').bind('click', function() {
+			$.post($SCRIPT_ROOT + '/translate', {
+				text: $('#text').val(),
+		        from: $('#from').val(),
+		        to: $('#to').val()
+		    }, function(data) {
+		    	$("#result").text(data.result);
+		    });
+		    return false;
+		});
+	  });
+	</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}history{% endblock %}
+
+{% block custom %}
+<style type="text/css">
+	
+</style>
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+	<div class="card">
+		<h3 class="card-header">Translation History</h3>
+		<div class="card-body">
+			{% for res in history %}
+			<p class="card-text"><b>{{ res.from_lang }}</b> :- {{ res.text }}</p>
+			<p class="card-text"><b>{{ res.to_lang }}</b> :- {{ res.t_text }}</p>
+			<hr>
+			{% endfor %}
+		</div>
+		<div class="card-footer">
+			<button class="btn btn-secondary mt-3" onclick="window.location = '/'"><- Back to Home</button>
+			<button class="btn btn-primary mt-3 ml-2" onclick="window.location = '/save'">Save Translation History</button>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
